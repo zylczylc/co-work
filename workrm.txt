@@ -27,3 +27,20 @@ pa0里面在nemu/里面make menuconfig 的时候：
 		It must be at least 19 lines by 80 columns.
 	我终端不够大？？？
 	挺离谱的，无奈全屏（为什么没有做适配呢？，我认为应该是和终端无关，打开一个新程序呀？不懂，反正这是我遇到的最后一个问题，就可以继续跟进度了）
+*************************************************************************************
+*************************************************************************************
+问题2：nemu/src/monitor/monitor.c 报这个错的时候，让用make gdb：
+	会说/nemu/src/monitor/monitor.c里面的36行assert(0)这个有问题
+解决方法：
+	vim /nemu/src/monitor/monitor.c
+	修改36行的assert（0）为assret(1)即可。
+	关于如何使用gdb去解决？目前gdb里面一直说：
+			(No debugging symbols found in 这个可执行文件
+		关于这个问题目前暂未解决。
+如果没有解决问题，还有另一种可能：
+	先备份以下Makefile：
+		cp Makefile Makefile-cp
+	然后修改Makefile：
+		vim Makefile
+	需要修改的地方是有些命令没有Tab，因为makefile里面的一些命令在可执行文件名称之后需要Tab键才能正常运行，这个由于makefile编译规范严格的原因，至于具体那些要Tab，可以自己试。或者有一个Makefile-ysw.txt的文件，是我可以正常运行的Makefile，有需要可以自行粘贴。
+		
