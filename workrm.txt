@@ -42,5 +42,5 @@ pa0里面在nemu/里面make menuconfig 的时候：
 		cp Makefile Makefile-cp
 	然后修改Makefile：
 		vim Makefile
-	需要修改的地方是有些命令没有Tab，因为makefile里面的一些命令在可执行文件名称之后需要Tab键才能正常运行，这个由于makefile编译规范严格的原因，至于具体那些要Tab，可以自己试。或者有一个Makefile-ysw.txt的文件，是我可以正常运行的Makefile，有需要可以自行粘贴。
+	需要修改的地方是有些命令没有Tab，因为makefile里面的一些命令在可执行文件名称之后需要Tab键才能正常运行，这个由于makefile编译规范严格的原因，至于具体那些要Tab，可以自己试。或者有一个Makefile-ysw的文件，是我可以正常运行的Makefile，有需要可以自行粘贴。
 		
