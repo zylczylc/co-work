@@ -43,4 +43,34 @@ pa0里面在nemu/里面make menuconfig 的时候：
 	然后修改Makefile：
 		vim Makefile
 	需要修改的地方是有些命令没有Tab，因为makefile里面的一些命令在可执行文件名称之后需要Tab键才能正常运行，这个由于makefile编译规范严格的原因，至于具体那些要Tab，可以自己试。或者有一个Makefile-ysw的文件，是我可以正常运行的Makefile，有需要可以自行粘贴。
-		
+*************************************************************************************
+*************************************************************************************
+verilator的安装：
+	以下是官网的git安装方法：
+ Prerequisites:
+sudo apt-get install git help2man perl python3 make autoconf g++ flex bison ccache
+sudo apt-get install libgoogle-perftools-dev numactl perl-doc
+sudo apt-get install libfl2  # Ubuntu only (ignore if gives error)
+sudo apt-get install libfl-dev  # Ubuntu only (ignore if gives error)
+sudo apt-get install zlibc zlib1g zlib1g-dev  # Ubuntu only (ignore if gives error)
+
+git clone https://github.com/verilator/verilator   # 克隆人家的库，自己随便放个位置，别放ysyx里，乱了不好记
+
+# Every time you need to build:
+unsetenv VERILATOR_ROOT  # For csh; ignore error if on bash，第一个大概率有问题，
+unset VERILATOR_ROOT  # For bash，上面有问题就用下面这个，虽然我觉得没啥用，但是是清一下吧
+cd verilator
+git pull         # Make sure git repository is up-to-date
+git tag          # See what versions exist，查看版本的
+#git checkout master      # Use development branch (e.g. recent bug fixes)感觉没啥用，可以忽略
+#git checkout stable      # Use most recent stable release，切换到最新版
+#git checkout v{version}  # Switch to specified release version，切换到想要的版本，执行这个就不用执行上一句的
+
+autoconf         # Create ./configure script，不懂，但是输一下，坑定有用的
+./configure      # Configure and create Makefile，同样更着输入就行
+make -j `nproc`  # Build Verilator itself (if error, try just 'make')，make执行Makefile，会有挺长一会的，一直有新对话弹出，等一会就行。
+sudo make install	#安装
+如果安装完成，可以输入 `verilator --version`检查安装的版本对不对。
+输出：	Verilator 5.008 2023-03-04 rev v5.008 就完成了
+
+
