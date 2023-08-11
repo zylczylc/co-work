@@ -1,0 +1,4 @@
+1.使用curl获取json数据集：curl -s https://example.com/data.json
+2.使用jq提取其中一列的最大值和最小值：curl -s https://example.com/data.json | jq -r '.[] | .column1' | awk ' NR==1{max=$1;min=$1} {if($1>max)max=$1; if($1<min)min=$1} END{print "Max:", "Min:", min}'
+3.使用jq提取两列直接差的总和（假设你想计算"column2"列与"colunm1"列的差的总和"）：curl -s https://example.com/data.json | jq -r '.[] | （.column2 - .column1）' | awk '{sum+=$1} END{print "Sum of differences:", sum}'，jq提取两列之差awk用于计算总和
+jq是什么，jq是方便处理和分析json数据的命令行处理工具他的一些用法随后附在github上

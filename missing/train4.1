@@ -1,0 +1,5 @@
+last | grep "reboot" | awk '{ print $5, $6, $7, $8 }' | awk '{ printf "%s-%s-%s %s\n", $3, $1, $2, $4 }'这是降序排列开机时间+日期
+
+last | grep "reboot" | awk '{ print $5, $6, $7, $8 }' | awk '{ printf "%s-%s-%s %s\n", $3, $1, $2, $4 }' | sort | tail -n 10 | awk '{ time = $1 " " $2; diff = systime() - mktime(time); print diff }'这是能够打印十次开机的是检查，其实他们完全是一模一样的。
+
+

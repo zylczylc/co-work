@@ -1,0 +1,5 @@
+统计words文件 (/usr/share/dict/words) 中包含至少三个a 且不以's 结尾的单词个数。这些单词中，出现频率前三的末尾两个字母是什么？ sed的 y命令，或者 tr 程序也许可以帮你解决大小写的问题。共存在多少种词尾两字母组合？还有一个很 有挑战性的问题：哪个组合从未出现过？
+首先：grep -E "^(.*a){3,}[^s]$" /usr/share/dict/words;;意思是捕捉带有至少三个a且结尾非s的字母
+这里可以有一个单词出现频率排序（其实就是找出共存在多少种词尾两个字母的组合：grep -E "^(.*a){3,}[^s]$" /usr/share/dict/words | awk '{ freq[$NF]++ } END { for (word in freq) print word, freq[word] }' | sort -k2 -nr | head -n 3这是将找到的单词进行每个单词的次数的排序，打印单词的出现的次数和显示单词本身NF是末行（也就是单词）freq装的是单词出现次数。执行之后进行end的操作，之后排序根据次数和倒序取前三
+grep -E "^(.*a){3,}[^s]$" /usr/share/dict/words | awk '{ freq[substr($NF, length($NF)-1, 2)]++ } END { for (suffix in freq) print suffix, freq[suffix] }' |  sort -k2 -nr | head -n 3这里是出现的后两个字母的排序substr($NF, length($NF)-1,2)提取每个单词的末尾两个字母$NF表示第一行的最后的一个字段（单词）length计算单词长度，substr就是提取单词末尾往前数的两个字符，即末尾两个字母。freq用于计算出现的次数。for（...）用于遍历存储末尾两个字母及其出现的次数，他这里似乎suffix装的是字母，freq[suffix]装的是次数
+

@@ -1,0 +1,5 @@
+find /path/to/folder -type f -name "*.html" -exec zip -j /path/to/output {} +
+such us : find . -type f -name "*.sh" -exec zip -j ./output/output.zip {} +
+
+#前面的一个路径是查找该路径的文件，type -f限定只找文件夹-name是找文件的名字
+#后面的-exec zip是将找到的文件都使用zip命令将他们添加到制定的文件中

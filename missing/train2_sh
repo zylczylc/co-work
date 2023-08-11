@@ -1,0 +1,20 @@
+#!/bin/bash
+#定义记录文件名和运行次数计数器 
+LOG_FILE="output.log" 
+RUN_COUNT=0
+#运行脚本直到他出错
+while true; do
+	#运行脚本，并将标准输出和标准错误流记录到日志文件
+  ((RUN_COUNT++))
+	./train2.sh >> "$LOG_FILE" 2>&1
+	if [ $? -ne 0 ]; then
+		echo "脚本运行失败,共运行了 $RUN_COUNT 次。"
+		break
+	fi
+	sleep 1
+done
+
+echo "脚本输出内容如下："
+cat "$LOG_FILE"
+
+rm "$LOG_FILE"

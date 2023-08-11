@@ -1,0 +1,19 @@
+#!/bin/bash
+#指定要查找的文件夹的路径
+search_path="/path/to/folder"
+
+#使用find命令查找所有的文件，并使用stat获取访问时间，然后排序
+#此处stat命令的参数-c代表自己制定输出格式%X表示访问时间的秒数，%n表示文件名
+若想知道其他的参数如-t（简短格式输出）-f等请man stat
+#sort的参数这里的-nr表示按数值的降序进行排列，若要查看其他的参数请man sort
+#此处的head -n 1表示查看他的第一行，也就是最近使用的文件信息
+recent_file=$(find "$search_path" -type f -exec stat -c "%X %n" {} + |sort -nr | head -n 1)
+#解析出最近使用的文件的路径和访问时间
+access_time=$(echo "$recent_file" | awk '{print $1}')
+#此处就是利用了awk命令打印他的第一个段落也就是访问时间的秒数
+file_path=$(echo "$recent_file" | awk '{print $2}')
+
+#输出最近使用的文件信息
+echo "最近使用的文件："
+echo "路径：$file_path"
+echo "访问时间:$(date -d @"$access_time")"
