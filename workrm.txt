@@ -1,0 +1,76 @@
+pa0里面在nemu/里面make menuconfig 的时候：
+	有报错，先是说：
+		make[1]: bison: No such file or directory
+	没有bison这个环境，然后就要安装这个环境：
+			sudo apt install bison
+	再运行，又报错：
+		make[1]: flex: No such file or directory
+	没有flex这个环境，反正再安装：
+			sudo apt install flex
+	继续运行，还是报错：
+		lxdialog/dialog.h:19:10: fatal error: ncurses.h: No such file or directory
+   19 | #include <ncurses.h>
+      |          ^~~~~~~~~~~
+	这里好像说的是没有某个头文件，FW告诉我，要更新python：（确实自带的python3挺老的）
+			sudo apt install libncurses5-dev
+			sudo apt-get install python3.8-dev（忘记哪句起作用的，但是我当时都安了一下）
+	不意外的报错：
+		make[1]: g++: No such file or directory
+	新系统啥都没配置过，只能疯狂安环境：
+			sudo apt install g++
+	接下来应该来这么一句：
+			g++ a.cpp -o a -l ncurses
+	（这里其实是对应缺少头文件那块的，下了新python后应该就安g++，然后来这句，好像意思是只是安装了之后还要给指定以下路径）
+
+	在来一遍又报错，但是这个能直接看懂不用STFW：
+		Your display is too small to run Menuconfig!
+		It must be at least 19 lines by 80 columns.
+	我终端不够大？？？
+	挺离谱的，无奈全屏（为什么没有做适配呢？，我认为应该是和终端无关，打开一个新程序呀？不懂，反正这是我遇到的最后一个问题，就可以继续跟进度了）
+*************************************************************************************
+*************************************************************************************
+问题2：nemu/src/monitor/monitor.c 报这个错的时候，让用make gdb：
+	会说/nemu/src/monitor/monitor.c里面的36行assert(0)这个有问题
+解决方法：
+	vim /nemu/src/monitor/monitor.c
+	修改36行的assert（0）为assret(1)即可。
+	关于如何使用gdb去解决？目前gdb里面一直说：
+			(No debugging symbols found in 这个可执行文件
+		关于这个问题目前暂未解决。
+如果没有解决问题，还有另一种可能：
+	先备份以下Makefile：
+		cp Makefile Makefile-cp
+	然后修改Makefile：
+		vim Makefile
+	需要修改的地方是有些命令没有Tab，因为makefile里面的一些命令在可执行文件名称之后需要Tab键才能正常运行，这个由于makefile编译规范严格的原因，至于具体那些要Tab，可以自己试。或者有一个Makefile-ysw的文件，是我可以正常运行的Makefile，有需要可以自行粘贴。
+*************************************************************************************
+*************************************************************************************
+verilator的安装：
+	以下是官网的git安装方法：
+ Prerequisites:
+sudo apt-get install git help2man perl python3 make autoconf g++ flex bison ccache
+sudo apt-get install libgoogle-perftools-dev numactl perl-doc
+sudo apt-get install libfl2  # Ubuntu only (ignore if gives error)
+sudo apt-get install libfl-dev  # Ubuntu only (ignore if gives error)
+sudo apt-get install zlibc zlib1g zlib1g-dev  # Ubuntu only (ignore if gives error)
+
+git clone https://github.com/verilator/verilator   # 克隆人家的库，自己随便放个位置，别放ysyx里，乱了不好记
+
+# Every time you need to build:
+unsetenv VERILATOR_ROOT  # For csh; ignore error if on bash，第一个大概率有问题，
+unset VERILATOR_ROOT  # For bash，上面有问题就用下面这个，虽然我觉得没啥用，但是是清一下吧
+cd verilator
+git pull         # Make sure git repository is up-to-date
+git tag          # See what versions exist，查看版本的
+#git checkout master      # Use development branch (e.g. recent bug fixes)感觉没啥用，可以忽略
+#git checkout stable      # Use most recent stable release，切换到最新版
+#git checkout v{version}  # Switch to specified release version，切换到想要的版本，执行这个就不用执行上一句的
+
+autoconf         # Create ./configure script，不懂，但是输一下，坑定有用的
+./configure      # Configure and create Makefile，同样更着输入就行
+make -j `nproc`  # Build Verilator itself (if error, try just 'make')，make执行Makefile，会有挺长一会的，一直有新对话弹出，等一会就行。
+sudo make install	#安装
+如果安装完成，可以输入 `verilator --version`检查安装的版本对不对。
+输出：	Verilator 5.008 2023-03-04 rev v5.008 就完成了
+
+
